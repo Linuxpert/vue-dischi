@@ -4,20 +4,20 @@
       <MyHeader />
     </header>
     <main>
-      <Content />
+      <Dischi />
     </main>
   </div>
 </template>
 
 <script>
 import MyHeader from './components/MyHeader.vue'
-import Content from './components/Content.vue'
+import Dischi from './components/Dischi.vue'
 
 export default {
   name: 'App',
   components: {
     MyHeader,
-    Content
+    Dischi
   }
 }
 </script>

@@ -1,42 +1,86 @@
 <template>
-  <div class="disc">
-      <img :src="details.poster" :alt="details.title">
-      <h2>{{details.title}}</h2>
-      <span>{{details.author}}i</span>
-      <span>{{details.year}}</span>
+<div>
+    <div class="filter">
+        <Filtro @changeGenre="getGen"/> 
+    </div>
+    <div v-if="discList.length === 0" class="load">
+        Loading...
+    </div>
+    <div v-else id="ContainerDisc">
+      <Disco v-for="list, i in filteredGen" :key="i" :details="list" />
   </div>
+</div>
 </template>
 
 <script>
+import axios from 'axios'
+import Disco from '@/components/Disco.vue'
+import Filtro from '@/components/Filtro.vue'
+
 export default {
   name: 'Dischi',
-  props: {
-      details: Object,
+  components: {
+    Disco,
+    Filtro
+  },
+  data() {
+      return {
+          apiUrl: "https://flynn.boolean.careers/exercises/api/array/music",
+          discList: [],
+          searchGen: "",
+      }
+  },
+  created(){
+      this.getDisc();
+  },
+  computed: {
+      filteredGen(){
+          if(this.searchGen === 'all'){
+              return this.discList
+          }
+
+          return this.discList.filter((item) => {
+              return item.genre.includes(this.searchGen)
+          })
+      }
+  },
+  methods: {
+      getDisc(){
+          axios
+          .get(this.apiUrl)
+          .then((result) =>{
+              this.discList = result.data.response
+            // console.log(result);
+          });
+
+      },
+
+      getGen(genType) {
+          this.searchGen = genType
+      }
+      
+
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-    .disc{
-        width: 18%;
+    #ContainerDisc{
+        width: 60%;
+        margin: 20px auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+    .load{
+        color: white;
         text-align: center;
-        background-color: rgb(46, 58, 70);
-        padding-bottom: 3%;
-        margin-bottom: 20px;
-        img{
-            width: 150px;
-            height: 150px;
-            margin-top: 15px;
-        }
-        h2{
-            font-size: 20px;
-            color: white;
-            margin: 10px 45px;
-        }
-        span{
-            display: block;
-            color: rgb(143, 142, 142);
-        }
+    }
+    .filter{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
     }
 </style>
