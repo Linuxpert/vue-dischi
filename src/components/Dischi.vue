@@ -1,8 +1,5 @@
 <template>
 <div>
-    <div class="filter">
-        <Filtro @changeGenre="getGen"/> 
-    </div>
     <div v-if="discList.length === 0" class="load">
         Loading...
     </div>
@@ -15,13 +12,14 @@
 <script>
 import axios from 'axios'
 import Disco from '@/components/Disco.vue'
-import Filtro from '@/components/Filtro.vue'
 
 export default {
   name: 'Dischi',
   components: {
     Disco,
-    Filtro
+  },
+  props: {
+      selectedGenre: String
   },
   data() {
       return {
@@ -35,12 +33,12 @@ export default {
   },
   computed: {
       filteredGen(){
-          if(this.searchGen === 'all'){
+          if(this.selectedGenre === 'all'){
               return this.discList
           }
 
           return this.discList.filter((item) => {
-              return item.genre.includes(this.searchGen)
+              return item.genre.includes(this.selectedGenre)
           })
       }
   },

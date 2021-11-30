@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <header>
-      <MyHeader />
+      <MyHeader :genres="genresList" @changeGenre="startSearch" />
     </header>
     <main>
-      <Dischi />
+      <Dischi :selectedGenre="genreToSearch" @genresReady="getGenresList" />
     </main>
   </div>
 </template>
@@ -18,6 +18,20 @@ export default {
   components: {
     MyHeader,
     Dischi
+  },
+  data() {
+    return{
+      genresList: [],
+      genreToSearch: "",
+    };
+  },
+  methods: {
+    getGenresList(allGenres) {
+      this.genresList = allGenres;
+    },
+    startSearch(genreToSearch) {
+      this.genreToSearch = genreToSearch;
+    }
   }
 }
 </script>
